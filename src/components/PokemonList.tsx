@@ -1,27 +1,26 @@
 import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import Image from "next/image";
+import { Pokemon } from "@/interfaces/PokemonResponse";
 
-const pokemonList = [
-    { id: 1, name: "Pikachu", type: "Electric", image: "https://www.freeiconspng.com/thumbs/pikachu-transparent/pikachu-png-transparent-0.png" },
-    { id: 2, name: "Charizard", type: "Fire", image: "https://vn.portal-pokemon.com/play/resources/pokedex/img/pm/0aa78a0061bda9d88cbb0bbf739cd9cc56522fe9.png" },
-    { id: 3, name: "Bulbasaur", type: "Grass", image: "https://static.wikia.nocookie.net/p__/images/e/e0/Bulbasaur_PSMD.png/revision/latest/thumbnail/width/360/height/360?cb=20191008175324&path-prefix=protagonist" },
-  ];
+interface PokemonUIProps {
+  pokemonList: Pokemon[];
+}
 
-export default function PokemonUI() {
+export default function PokemonUI({ pokemonList }: PokemonUIProps) {
   const [selectedPokemon, setSelectedPokemon] = useState(null);
 
   return (
-    <div className="min-h-screen bg-gray-900 text-white p-6">
-      <motion.h1 
-        className="text-4xl font-bold text-center mb-6"
+    <div className="min-h-screen bg-white text-white p-6">
+      <motion.h1
+        className="text-4xl font-bold text-center mb-6 text-black"
         initial={{ opacity: 0, y: -20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.5 }}
       >
-        Pokémon Collection
+        Pokémon
       </motion.h1>
-      <motion.div 
+      <motion.div
         className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6"
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
@@ -38,7 +37,7 @@ export default function PokemonUI() {
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.3 }}
           >
-            <motion.div 
+            <motion.div
               initial={{ scale: 0.8 }}
               animate={{ scale: 1 }}
               transition={{ duration: 0.5 }}
@@ -51,8 +50,12 @@ export default function PokemonUI() {
                 className="mx-auto"
               />
             </motion.div>
-            <h2 className="text-xl font-semibold text-center mt-4">{pokemon.name}</h2>
-            <p className="text-center text-sm text-gray-400">{pokemon.type} Type</p>
+            <h2 className="text-xl font-semibold text-center mt-4">
+              {pokemon.name}
+            </h2>
+            <p className="text-center text-sm text-gray-400">
+              {pokemon.type} Type
+            </p>
           </motion.div>
         ))}
       </motion.div>
@@ -73,7 +76,7 @@ export default function PokemonUI() {
               exit={{ scale: 0.8 }}
               transition={{ duration: 0.3 }}
             >
-              <motion.div 
+              <motion.div
                 initial={{ rotateY: 180 }}
                 animate={{ rotateY: 0 }}
                 transition={{ duration: 0.5 }}
@@ -86,7 +89,9 @@ export default function PokemonUI() {
                   className="mx-auto"
                 />
               </motion.div>
-              <h2 className="text-2xl font-bold mt-4">{selectedPokemon.name}</h2>
+              <h2 className="text-2xl font-bold mt-4">
+                {selectedPokemon.name}
+              </h2>
               <p className="text-gray-400">Type: {selectedPokemon.type}</p>
             </motion.div>
           </motion.div>
