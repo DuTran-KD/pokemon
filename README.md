@@ -73,3 +73,6 @@ This project is licensed under the MIT License.
 ## Contact
 For any inquiries, please contact duu.trancong@gmail.com
 
+## Progress Log
+- **Day 1**: Set up Next.js & folder structure. Implement Pokémon list, filter bar & API calls ✅
+- **Day 2**: Refactor & document project ✅
