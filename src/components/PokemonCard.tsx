@@ -63,7 +63,7 @@ export default function PokemonCard({ pokemon }: PokemonCardProps) {
       <h2 className="text-md capitalize font-semibold text-center mt-4 text-black">
         {pokemon.name}
       </h2>
-      <p className="text-center text-sm text-gray-400">Number: {pokemon.id}</p>
+      <p className="text-center text-sm text-gray-400">Number: {data?.id}</p>
     </motion.div>
   );
 }
