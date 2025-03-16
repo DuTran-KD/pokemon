@@ -71,5 +71,5 @@ Ensure you have the following installed:
 This project is licensed under the MIT License.
 
 ## Contact
-For any inquiries, please contact [your email or GitHub profile].
+For any inquiries, please contact duu.trancong@gmail.com
 
