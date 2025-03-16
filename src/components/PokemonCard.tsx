@@ -20,7 +20,8 @@ export default function PokemonCard({ pokemon }: PokemonCardProps) {
   });
 
   useEffect(() => {
-    setImgSrc(data?.sprites?.other?.["official-artwork"].front_default);
+    console.log(data?.sprites?.other?.showdown)
+    setImgSrc(data?.sprites?.other?.showdown?.front_shiny);
   }, [data]);
 
   const handleLoadingComplete = () => {
