@@ -18,6 +18,10 @@ export default function PokemonUIDefault({
   const router = useRouter();
   const [filteredPokemons, setFilteredPokemons] = useState<Pokemon[]>([]);
 
+  useEffect(() => {
+    setFilteredPokemons(pokemons);
+  }, [pokemons]);
+
   const handleFilter = (filteredPokemons: string[]) => {
     const config: Parameters<typeof router.push>[0] = {
       pathname: "/pokemon",
@@ -30,12 +34,11 @@ export default function PokemonUIDefault({
     router.push(config);
   };
 
-  const handleNextPage = () => {
+  const handlePageChange = (increment: number) => {
     const { page = 1, types } = router.query;
-
     const config: Parameters<typeof router.push>[0] = {
       pathname: "/pokemon",
-      query: { page: Number(page) + 1 },
+      query: { page: Number(page) + increment },
     };
 
     if (types) {
@@ -43,24 +46,6 @@ export default function PokemonUIDefault({
     }
     router.push(config);
   };
-
-  const handlePreviousPage = () => {
-    const { page = 1, types } = router.query;
-
-    const config: Parameters<typeof router.push>[0] = {
-      pathname: "/pokemon",
-      query: { page: Number(page) - 1 },
-    };
-
-    if (types) {
-      config.query = { ...config.query as object, types };
-    }
-    router.push(config);
-  };
-
-  useEffect(() => {
-    setFilteredPokemons(pokemons);
-  }, [pokemons]);
 
   return (
     <div className="min-h-screen bg-white text-white p-6">
@@ -99,10 +84,7 @@ export default function PokemonUIDefault({
         {pokemonResponse?.previous && (
           <button
             className="bg-blue-500 text-white px-4 py-2 rounded mr-2 cursor-pointer"
-            onClick={() => {
-              // Handle previous page logic here
-              handlePreviousPage();
-            }}
+            onClick={() => handlePageChange(-1)}
           >
             Previous
           </button>
@@ -110,10 +92,7 @@ export default function PokemonUIDefault({
         {pokemonResponse?.next && (
           <button
             className="bg-blue-500 text-white px-4 py-2 rounded cursor-pointer"
-            onClick={() => {
-              // Handle next page logic here
-              handleNextPage();
-            }}
+            onClick={() => handlePageChange(1)}
           >
             Next
           </button>

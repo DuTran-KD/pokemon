@@ -12,11 +12,25 @@ interface PokemonCardProps {
 export default function PokemonCard({ pokemon }: PokemonCardProps) {
   const [loading, setLoading] = useState(true);
   const [imgSrc, setImgSrc] = useState(pokemon.image);
-  const { data, error } = useSWR(pokemon.url, fetcher);
+
+  const { data, error } = useSWR(pokemon.url, fetcher, {
+    revalidateOnFocus: false,
+    shouldRetryOnError: false,
+    dedupingInterval: 60000, // 1 minute
+  });
 
   useEffect(() => {
-    setImgSrc(data?.sprites.other?.["official-artwork"].front_default);
+    setImgSrc(data?.sprites?.other?.["official-artwork"].front_default);
   }, [data]);
+
+  const handleLoadingComplete = () => {
+    setLoading(false);
+  };
+
+  const handleError = () => {
+    setLoading(false);
+    setImgSrc("/pokemonball.webp");
+  };
 
   return (
     <motion.div
@@ -41,14 +55,9 @@ export default function PokemonCard({ pokemon }: PokemonCardProps) {
           width={150}
           height={150}
           style={{ objectFit: "contain", height: 50 }}
-          className={`mx-auto`}
-          onLoadingComplete={() => {
-            setLoading(false);
-          }}
-          onError={() => {
-            setLoading(false);
-            setImgSrc("/pokemonball.webp");
-          }}
+          className="mx-auto"
+          onLoadingComplete={handleLoadingComplete}
+          onError={handleError}
         />
       </motion.div>
       <h2 className="text-md capitalize font-semibold text-center mt-4 text-black">

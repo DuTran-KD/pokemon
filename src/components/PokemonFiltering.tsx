@@ -14,30 +14,31 @@ const PokemonFiltering: React.FC<PokemonFilteringProps> = ({
   const [types, setTypes] = useState<string[]>([]);
   const [selectedTypes, setSelectedTypes] = useState<string[]>([]);
   const router = useRouter();
-  const fetchTypes = async () => {
-    try {
-      const response = await getPokemonTypes();
-      setTypes(response.results.map((type: { name: string }) => type.name));
-    } catch (error) {
-      console.error("Error fetching Pokémon types:", error);
-    }
-  };
 
   useEffect(() => {
+    const fetchTypes = async () => {
+      try {
+        const response = await getPokemonTypes();
+        setTypes(response.results.map((type: { name: string }) => type.name));
+      } catch (error) {
+        console.error("Error fetching Pokémon types:", error);
+      }
+    };
+
     fetchTypes();
-    const types = router.query.types;
-    if (types) {
-      setSelectedTypes((types as string).split(","));
+
+    const typesQuery = router.query.types;
+    if (typesQuery) {
+      setSelectedTypes((typesQuery as string).split(","));
     }
-  }, []);
+  }, [router.query.types]);
 
   const toggleTypeSelection = (type: string) => {
-    const selected = selectedTypes.includes(type)
+    const updatedSelectedTypes = selectedTypes.includes(type)
       ? selectedTypes.filter((t) => t !== type)
       : [...selectedTypes, type];
-    setSelectedTypes(selected);
-
-    onFilter(selected);
+    setSelectedTypes(updatedSelectedTypes);
+    onFilter(updatedSelectedTypes);
   };
 
   return (

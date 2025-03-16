@@ -58,21 +58,19 @@ export const filteredPokemon = async (
   const response = await Promise.all(
     types.map(async (type) => {
       const data = await getPokemonByType(type);
-      return data.pokemon.map((pokemon: { pokemon: { name: string } }) => {
-        return pokemon.pokemon;
-      });
+      return data.pokemon.map((pokemon: { pokemon: { name: string } }) => pokemon.pokemon);
     })
   );
 
   let pokemons: Pokemon[] = [];
   for (const item of response) {
-    if (pokemons.length == 0) {
+    if (pokemons.length === 0) {
       pokemons = item;
-      continue;
+    } else {
+      pokemons = pokemons.filter((cur) =>
+        item.some((el: Pokemon) => el.name === cur.name)
+      );
     }
-    pokemons = pokemons.filter((cur) =>
-      item.find((el: Pokemon) => el.name == cur.name)
-    );
   }
 
   const next = pokemons.length > limit * page ? 'ok' : null;
@@ -84,22 +82,4 @@ export const filteredPokemon = async (
     previous: previous,
     results: pokemons.slice((page - 1) * limit, page * limit),
   };
-};
-export const fetchImages = async (pokemons: Pokemon[]) => {
-  const updatedPokemons = await Promise.all(
-    pokemons.map(async (pokemon) => {
-      const response = await fetch(pokemon.url);
-      const data = await response.json();
-
-      return {
-        ...pokemon,
-        image:
-          data.sprites.other?.showdown?.front_default ||
-          data.sprites.front_default,
-        id: data.id,
-      };
-    })
-  );
-
-  return updatedPokemons;
 };

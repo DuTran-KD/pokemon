@@ -12,7 +12,6 @@ export default function HomePage({ pokemonResponse }: HomePageProps) {
 
   useEffect(() => {
     if (pokemonResponse?.results) {
-      // fetchImages(pokemonResponse?.results);
       setPokemons(pokemonResponse?.results);
     }
   }, [pokemonResponse]);

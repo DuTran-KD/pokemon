@@ -6,7 +6,3 @@ export interface PokemonResponse {
     previous: string | null;
     results: Pokemon[];
 }
-
-export interface HomePageProps {
-    pokemonResponse: PokemonResponse;
-}
