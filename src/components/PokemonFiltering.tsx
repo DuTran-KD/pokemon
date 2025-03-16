@@ -1,4 +1,5 @@
 import { getPokemonTypes } from "@/lib/Pokeapi";
+import { useRouter } from "next/router";
 import React, { useEffect, useState } from "react";
 
 interface PokemonFilteringProps {
@@ -12,7 +13,7 @@ const PokemonFiltering: React.FC<PokemonFilteringProps> = ({
 }) => {
   const [types, setTypes] = useState<string[]>([]);
   const [selectedTypes, setSelectedTypes] = useState<string[]>([]);
-
+  const router = useRouter();
   const fetchTypes = async () => {
     try {
       const response = await getPokemonTypes();
@@ -24,18 +25,19 @@ const PokemonFiltering: React.FC<PokemonFilteringProps> = ({
 
   useEffect(() => {
     fetchTypes();
+    const types = router.query.types;
+    if (types) {
+      setSelectedTypes((types as string).split(","));
+    }
   }, []);
 
-  useEffect(() => {
-    onFilter(selectedTypes);
-  }, [selectedTypes]);
-
   const toggleTypeSelection = (type: string) => {
-    setSelectedTypes((prevSelectedTypes) =>
-      prevSelectedTypes.includes(type)
-        ? prevSelectedTypes.filter((t) => t !== type)
-        : [...prevSelectedTypes, type]
-    );
+    const selected = selectedTypes.includes(type)
+      ? selectedTypes.filter((t) => t !== type)
+      : [...selectedTypes, type];
+    setSelectedTypes(selected);
+
+    onFilter(selected);
   };
 
   return (

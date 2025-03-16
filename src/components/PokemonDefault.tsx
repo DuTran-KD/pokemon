@@ -1,11 +1,10 @@
+import { Pokemon } from "@/interfaces/Pokemon";
 import { PokemonResponse } from "@/interfaces/PokemonResponse";
 import { motion } from "framer-motion";
-import Image from "next/image";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
+import PokemonCard from "./PokemonCard";
 import PokemonFiltering from "./PokemonFiltering";
-import { Pokemon } from "@/interfaces/Pokemon";
-import { Params } from "next/dist/server/request/params";
 
 interface PokemonUIProps {
   pokemonResponse: PokemonResponse;
@@ -18,22 +17,15 @@ export default function PokemonUIDefault({
 }: PokemonUIProps) {
   const router = useRouter();
   const [filteredPokemons, setFilteredPokemons] = useState<Pokemon[]>([]);
-  const [filters, setFilters] = useState<string[]>([]);
 
   const handleFilter = (filteredPokemons: string[]) => {
-    console.log("filteredPokemons: ", filteredPokemons);
-    // if (filteredPokemons.length === 0) {
-    //   router.push("/pokemon");
-    //   return;
-    // }
-    setFilters(filteredPokemons);
-    const config: any = {
+    const config: Parameters<typeof router.push>[0] = {
       pathname: "/pokemon",
       query: { page: 1 },
     };
 
     if (filteredPokemons.length > 0) {
-      config.query = { ...config.query, types: filteredPokemons.join(",") };
+      config.query = { ...config.query as object, types: filteredPokemons.join(",") };
     }
     router.push(config);
   };
@@ -41,13 +33,13 @@ export default function PokemonUIDefault({
   const handleNextPage = () => {
     const { page = 1, types } = router.query;
 
-    const config: any = {
+    const config: Parameters<typeof router.push>[0] = {
       pathname: "/pokemon",
       query: { page: Number(page) + 1 },
     };
 
     if (types) {
-      config.query = { ...config.query, types };
+      config.query = { ...config.query as object, types };
     }
     router.push(config);
   };
@@ -55,13 +47,13 @@ export default function PokemonUIDefault({
   const handlePreviousPage = () => {
     const { page = 1, types } = router.query;
 
-    const config: any = {
+    const config: Parameters<typeof router.push>[0] = {
       pathname: "/pokemon",
       query: { page: Number(page) - 1 },
     };
 
     if (types) {
-      config.query = { ...config.query, types };
+      config.query = { ...config.query as object, types };
     }
     router.push(config);
   };
@@ -78,7 +70,7 @@ export default function PokemonUIDefault({
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.5 }}
       >
-        Pokémon
+        Welcome to Pokemon world
       </motion.h1>
       <motion.div>
         <PokemonFiltering
@@ -93,36 +85,7 @@ export default function PokemonUIDefault({
         transition={{ staggerChildren: 0.2 }}
       >
         {filteredPokemons?.map((pokemon: Pokemon) => (
-          <motion.div
-            key={pokemon.id}
-            className="bg-white p-4 rounded-lg shadow-lg hover:shadow-xl"
-            whileHover={{ scale: 1.05 }}
-            whileTap={{ scale: 0.95 }}
-            initial={{ opacity: 0, y: 10 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.3 }}
-          >
-            <motion.div
-              initial={{ scale: 0.8 }}
-              animate={{ scale: 1 }}
-              transition={{ duration: 0.5 }}
-            >
-              <Image
-                src={pokemon.image}
-                alt={pokemon.name}
-                width={150}
-                height={150}
-                style={{ objectFit: "contain", height: 50 }}
-                className="mx-auto"
-              />
-            </motion.div>
-            <h2 className="text-md capitalize font-semibold text-center mt-4 text-black">
-              {pokemon.name}
-            </h2>
-            <p className="text-center text-sm text-gray-400">
-              Number: {pokemon.id}
-            </p>
-          </motion.div>
+          <PokemonCard key={pokemon.id} pokemon={pokemon} />
         ))}
       </motion.div>
 

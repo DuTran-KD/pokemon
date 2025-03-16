@@ -1,4 +1,3 @@
-import { StaticImport } from "next/dist/shared/lib/get-img-props";
 import { Pokemon } from "./Pokemon";
 
 export interface PokemonResponse {

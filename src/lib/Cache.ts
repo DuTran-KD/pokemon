@@ -1,4 +1,4 @@
-export const cacheData = (key: string, data: any) => {
+export const cacheData = (key: string, data: object) => {
     localStorage.setItem(key, JSON.stringify({ data, timestamp: new Date().getTime() }));
 };
 
